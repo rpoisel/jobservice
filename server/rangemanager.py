@@ -47,9 +47,9 @@ class RangeManager(object):
     def report(self, pSuccess, pRangeId, pMessage):
         if pRangeId >= len(self.__mRanges):
             return
-        self.__mMessage = pMessage
         self.__mRanges[pRangeId]['completed'] = True
         if pSuccess:
+            self.__mMessage = pMessage
             self.__mSuccess = True
         for lListener in self.__mListeners:
             lListener.updateProgress()

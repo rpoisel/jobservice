@@ -23,11 +23,11 @@ def enqueue_output(pOut, pQueue):
 
 def main():
     try:
-        HOST = "pc16.leela.lab"
+        HOST = "localhost"
         PORT = 5000
         MESSAGE = 'Password Not Found'
         FOUND_PASS = 'false'
-        TRUECRACK_PATH = '/netexport/tmp/truecrack-3/bin/truecrack'
+        TRUECRACK_PATH = '/tmp/truecrack-3/bin/truecrack'
         HEADER_PATH = 'res/example.img'
         DICT_PATH = 'res/small.txt'
         REFETCH_PERIOD = 2
@@ -121,9 +121,6 @@ def main():
                 "&rangeId=" + str(lRangeId) +
                 "&message=" + MESSAGE
             )
-
-            if FOUND_PASS is 'true':
-                break
 
             # notify server
 
