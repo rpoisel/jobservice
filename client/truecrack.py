@@ -6,6 +6,7 @@ import json
 from time import sleep
 from Queue import Queue, Empty
 from threading import Thread
+import string
 
 import requests
 
@@ -22,13 +23,13 @@ def enqueue_output(pOut, pQueue):
 
 def main():
     try:
-        HOST = "localhost"
+        HOST = "pc16.leela.lab"
         PORT = 5000
         MESSAGE = 'Password Not Found'
         FOUND_PASS = 'false'
-        TRUECRACK_PATH = '/tmp/truecrack-3/bin/truecrack'
-        HEADER_PATH = '/tmp/header.img'
-        DICT_PATH = '/tmp/small.txt'
+        TRUECRACK_PATH = '/netexport/tmp/truecrack-3/bin/truecrack'
+        HEADER_PATH = 'res/example.img'
+        DICT_PATH = 'res/small.txt'
         REFETCH_PERIOD = 2
         WORD_SIZE = 0
 
@@ -109,17 +110,10 @@ def main():
             # parse output and forward result to server
             print(lOutput)
 
-#                if 'Found password' in pass_check:
-#                    MESSAGE = pass_check.split()[9]
-#                    FOUND_PASS = 'true'
-#                    break
-
-            # notify server
-
-            # Print truecrack's output
-            #print pass_check
-
-            # Determine if the password has been found
+            if 'Found password' in lOutput:
+                MESSAGE = lOutput.split()[9]
+                MESSAGE = MESSAGE.strip(string.punctuation)
+                FOUND_PASS = 'true'
 
             lResponse = requests.get(
                 "http://" + HOST + ":" + str(PORT) + "/report?" +
@@ -128,7 +122,17 @@ def main():
                 "&message=" + MESSAGE
             )
 
-    except Exception, pExc:
+            if FOUND_PASS is 'true':
+                break
+
+            # notify server
+
+            # Print truecrack's output
+            #print pass_check
+
+            # Determine if the password has been found
+
+    except Exception:
         traceback.print_exc()
     except KeyboardInterrupt:
         # clean up here
