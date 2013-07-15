@@ -16,9 +16,8 @@ As root (Ubuntu):
 
 As unprivileged user:
 
+        $ git clone <repos-path> <dest-dir>
         $ virtualenv <dest-dir>
-        $ cp -R <repos-dir>/server <dest-dir>
-        $ cp -R <repos-dir>/client <dest-dir>
         $ cd <dest-dir>
         $ source bin/activate
         $ pip install Flask-RESTful
