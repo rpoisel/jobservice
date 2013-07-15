@@ -1,3 +1,22 @@
+class PermutatorIterator:
+
+    def __init__(self, pPermutator, pOffsetStart, pOffsetEnd):
+        self.__mPermutator = pPermutator
+        self.__mOffsetCur = pOffsetStart
+        self.__mOffsetEnd = pOffsetEnd
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if self.__mOffsetCur == self.__mOffsetEnd:
+            raise StopIteration
+        else:
+            lCurrent = self.__mPermutator.get(self.__mOffsetCur)
+            self.__mOffsetCur += 1
+            return lCurrent
+
+
 class Permutator:
 
     def __init__(self, pNumChars, pRange):
@@ -15,20 +34,47 @@ class Permutator:
 
         return lPass
 
-    def getMin(self):
-        return 0
+    def getNumPerms(self):
+        return len(self.__mRange)**self.__mNumChars
 
-    def getMax(self):
-        return len(self.__mRange)**self.__mNumChars - 1
+    def getIter(self, pRangeId, pNumRanges):
+        if pRangeId + 1 > pNumRanges:
+            raise ValueError
+        else:
+            lNumExtendedRanges = self.getNumPerms() % pNumRanges
+            lNumPermsPerRange = self.getNumPerms() // pNumRanges
+            lOffsetStart = (lNumPermsPerRange + 1) * \
+                (
+                    pRangeId
+                    if pRangeId < lNumExtendedRanges
+                    else lNumExtendedRanges
+                ) + \
+                lNumPermsPerRange * \
+                (
+                    pRangeId - lNumExtendedRanges
+                    if pRangeId > lNumExtendedRanges
+                    else 0
+                )
+            lOffsetEnd = lOffsetStart + \
+                (
+                    lNumPermsPerRange + 1
+                    if pRangeId < lNumExtendedRanges
+                    else lNumPermsPerRange
+                )
+            return PermutatorIterator(
+                self,
+                lOffsetStart,
+                lOffsetEnd
+            )
 
 
 def main():
-    lPermutator = Permutator(6, 'abcdefghijklmnopqrstuvwxyz_')
-    print("Min: " + str(lPermutator.getMin()))
-    print("Max: " + str(lPermutator.getMax()))
-    print("Offset Min: " + str(lPermutator.get(lPermutator.getMin())))
-    print("Offset Middle: " + str(lPermutator.get(lPermutator.getMax() / 2)))
-    print("Offset Max: " + str(lPermutator.get(lPermutator.getMax())))
+    #lPermutator = Permutator(5, 'abcdefghijklmnopqrstuvwxyz_')
+    lPermutator = Permutator(3, 'abcdefghij')
+    for lCombination in lPermutator.getIter(0, 52):
+        print(lCombination)
+    for lCombination in lPermutator.getIter(12, 52):
+        print(lCombination)
 
 if __name__ == "__main__":
     main()
