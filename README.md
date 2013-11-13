@@ -23,6 +23,7 @@ As unprivileged user:
         $ pip install Flask-RESTful
         $ pip install requests
         $ pip install gevent-socketio
+        $ pip install six
 
 Usage
 -----
